@@ -78,9 +78,6 @@ exports.deletePost = async (req, res, next) => {
 };
 
 exports.createPost = async (req, res, next) => {
-  //comment-on-everything-bucket
-  //commentOnEverythingApp
-  //AKIASWTHNULYHPLYKZFW
   try {
     checkValidationResult(req);
     const post = new Post({
