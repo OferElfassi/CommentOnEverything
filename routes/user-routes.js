@@ -4,8 +4,6 @@ const isAuth = require("../middelware/is-auth");
 const s3 = require('../s3')
 const router = express.Router();
 
-
-
 router.get("/",isAuth, userController.getUsers);
 router.get("/:userId", userController.getUser);
 router.delete("/:userId",isAuth, userController.deleteUser);

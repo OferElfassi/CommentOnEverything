@@ -1,4 +1,4 @@
-const compare = require("resemblejs").compare;
+const compare = require('resemblejs').compare;
 
 function getImageDiff(image1, image2) {
   return new Promise((resolve, reject) => {
@@ -9,14 +9,14 @@ function getImageDiff(image1, image2) {
           green: 0,
           blue: 255,
         },
-        errorType: "movement",
+        errorType: 'movement',
         transparency: 0.3,
         largeImageThreshold: 1200,
         useCrossOrigin: false,
         outputDiff: true,
       },
       scaleToSameSize: true,
-      ignore: "antialiasing",
+      ignore: 'antialiasing',
     };
 
     compare(image1, image2, options, function (err, data) {
@@ -39,4 +39,4 @@ const compareImages = async (sourceImage, targetImages) => {
   return resembleList;
 };
 
-module.exports = compareImages
+module.exports = compareImages;

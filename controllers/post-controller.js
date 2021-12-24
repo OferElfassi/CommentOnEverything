@@ -11,11 +11,6 @@ const s3 = require("../s3");
 
 exports.getPosts = async (req, res, next) => {
   try {
-    // const posts = await Post.find({});
-    // if (!posts) {
-    //   throw new HttpError("cant find posts", 404);
-    // }
-    // const populatedPosts = await posts
     const posts = await Post.find({}).populate({
         path: "reactions",
         select: { like: 1 },
@@ -43,11 +38,6 @@ exports.getPosts = async (req, res, next) => {
 
 exports.getPostsById = async (req, res, next) => {
   try {
-    // const post = await Post.findById(req.params.postId);
-    // if (!post) {
-    //   throw new HttpError("cant find this post", 404);
-    // }
-    // const populatedPost = await post
     const post = await Post.findById(req.params.postId).populate({
         path: "reactions",
         select: { like: 1 },
@@ -101,9 +91,7 @@ exports.deletePost = async (req, res, next) => {
 };
 
 exports.createPost = async (req, res, next) => {
-  //comment-on-everything-bucket
-  //commentOnEverythingApp
-  //AKIASWTHNULYHPLYKZFW
+
   try {
     checkValidationResult(req);
     const post = new Post({

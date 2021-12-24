@@ -1,2 +1,2 @@
-require("./server");
-require("./db");
+require('./server');
+require('./db');
