@@ -21,6 +21,8 @@ app.use((req, res, next) => {
     'Access-Control-Allow-Headers',
     'Origin,X-Requested-Width,Content-Type,Authorization,Content-disposition,Content-Length',
   );
+  res.setHeader('Content-type', 'application/json');
+
   next();
 });
 
