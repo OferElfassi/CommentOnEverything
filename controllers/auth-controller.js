@@ -6,9 +6,11 @@ const checkValidationResult = require('../utils/check-validation-result');
 
 exports.signup = async (req, res, next) => {
   try {
+    console.log( req.body)
     checkValidationResult(req);
     const user = await User.findOne({email: req.body.email});
     if (user) {
+      console.log(user)
       throw new HttpError('this email is already exists', 401);
     }
     const hashedPassword = await bcrypt.hash(req.body.password, 12);

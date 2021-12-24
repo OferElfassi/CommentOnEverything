@@ -21,9 +21,10 @@ function getImageDiff(image1, image2) {
 
     compare(image1, image2, options, function (err, data) {
       if (err) {
-        reject(err);
+        reject(false);
       } else {
-        resolve(data.rawMisMatchPercentage < 50);
+        console.log(data)
+        resolve(data.rawMisMatchPercentage < 47);
       }
     });
   });
@@ -32,7 +33,7 @@ function getImageDiff(image1, image2) {
 const compareImages = async (sourceImage, targetImages) => {
   const resembleList = [];
   for (const item of targetImages) {
-    if (await getImageDiff(sourceImage, item.image.url)) {
+    if (await getImageDiff(sourceImage, item.image.url)===true) {
       resembleList.push(item);
     }
   }
