@@ -1,20 +1,32 @@
 {
-  "name": "comment_on_everything",
+  "name": "backend",
   "version": "1.0.0",
-  "description": "social commenting web application",
+  "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Ofer Elasssi & Dekel Ben-David",
+  "author": "",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.1048.0",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^10.0.0",
     "express": "^4.17.2",
-    "mongoose": "^6.1.3"
+    "express-validator": "^6.14.0",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.1",
+    "moment-timezone": "^0.5.34",
+    "mongoose": "^6.1.2",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.4",
+    "multer-s3": "^2.10.0",
+    "resemblejs": "^4.0.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "dotenv": "^10.0.0",
-    "nodemon": "^2.0.15",
-    "prettier": "^2.5.1"
+    "nodemon": "^2.0.15"
   }
 }
