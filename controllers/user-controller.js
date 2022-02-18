@@ -1,4 +1,5 @@
 const User = require('../models/user-model');
+const Post = require('../models/post-model');
 const HttpError = require('../utils/HttpError');
 const s3 = require('../s3');
 
@@ -23,14 +24,13 @@ exports.getUser = async (req, res, next) => {
     if (!user) {
       throw new HttpError('cant find this user', 404);
     }
-    const populatedUser = await user
-      .populate('posts')
-      .populate('following')
-      .exec();
-    if (!populatedUser) {
+   await User.populate(user,{path:'posts',model:Post})
+    await  User.populate(user,{path:'following',model:User})
+
+    if (!user) {
       throw new HttpError('cant get user data', 404);
     }
-    res.status(200).json({message: 'success', data: populatedUser});
+    res.status(200).json({message: 'success', data: user});
   } catch (e) {
     next(e);
   }
