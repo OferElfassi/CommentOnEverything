@@ -48,7 +48,7 @@ exports.getPostsById = async (req, res, next) => {
         })
             .populate({
                 path: "comments",
-                populate: {path: "user", model: "users"},
+                populate: {path: "user", model: User},
             })
             .populate({path: "user", select: {fullName: 1, image: 1, _id: 1}})
             .populate("hashtag");
