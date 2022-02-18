@@ -67,18 +67,23 @@ exports.getPostsByHashtag = async (req, res, next) => {
         if (!posts) {
             throw new HttpError("cant find this posts", 404);
         }
-        const populatedPosts = await posts
-            .populate("reactions")
-            .populate({
-                path: "comments",
-                populate: {path: "user", model: User},
-            })
-            .populate("user")
-            .populate("hashtag");
-        if (!populatedPosts) {
+        await Post.populate(posts, {
+            path: 'reactions', model: Reaction,
+        })
+
+        await Post.populate(posts, {
+            path: 'comments', model: Comment,
+        })
+
+        await Post.populate(posts, {
+            path: 'user', model: User,
+        })
+
+
+        if (!posts) {
             throw new HttpError("cant get posts data", 404);
         }
-        res.status(200).json({message: "success", data: populatedPosts});
+        res.status(200).json({message: "success", data: posts});
     } catch (e) {
         next(e);
     }
