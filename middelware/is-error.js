@@ -1,4 +1,5 @@
 const isError = (error, req, res, next) => {
+    console.log(error)
     if (res.headerSent) {
         return next(error);
     }

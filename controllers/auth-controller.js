@@ -1,4 +1,5 @@
 const User = require('../models/user-model');
+const Post = require('../models/post-model');
 const HttpError = require('../utils/HttpError');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -44,8 +45,9 @@ exports.login = async (req, res, next) => {
     const token = jwt.sign(
       {email: user.email, userId: user._id},
       'secretstring',
-      {expiresIn: '2h'},
+      // {expiresIn: '2h'},
     );
+    await User.populate(user,{path:'posts',model:Post,populate:{path:'hashtag'}})
     res
       .status(200)
       .json({

@@ -1,11 +1,10 @@
-const Post = require("../models/post-model");
 const HttpError = require("../utils/HttpError");
 const Hashtag = require("../models/hashtag-model");
 const checkValidationResult = require("../utils/check-validation-result");
 
 exports.getHashTags = async (req, res, next) => {
     try {
-        const hashtags = await Post.find({})
+        const hashtags = await Hashtag.find({})
         if (!hashtags) {
             throw new HttpError("cant get hashtags data", 404);
         }

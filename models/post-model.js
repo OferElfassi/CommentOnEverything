@@ -13,6 +13,9 @@ const postSchema = new mongoose.Schema({
   user: {type: Schema.Types.ObjectId, ref: 'user'},
   hashtag: {type: Schema.Types.ObjectId, ref: 'hashtag'},
 });
+
+postSchema.set('toJSON', {getters: true});
+
 postSchema.static('findByHashtag', async function (hashtag) {
   const posts = await this.find({});
   const fetchedHashtag = await Hashtag.findOne({title: hashtag});

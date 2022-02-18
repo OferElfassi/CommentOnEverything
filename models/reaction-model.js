@@ -8,5 +8,6 @@ const reactionSchema = new mongoose.Schema({
   user: {type: Schema.Types.ObjectId, ref: 'user'},
 });
 
+reactionSchema.set('toJSON', {getters: true});
 const Reaction = mongoose.model('reaction', reactionSchema);
 module.exports = Reaction;
