@@ -71,7 +71,7 @@ exports.getPostsByHashtag = async (req, res, next) => {
             .populate("reactions")
             .populate({
                 path: "comments",
-                populate: {path: "user", model: "users"},
+                populate: {path: "user", model: User},
             })
             .populate("user")
             .populate("hashtag");
