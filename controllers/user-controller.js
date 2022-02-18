@@ -56,7 +56,7 @@ exports.updateUser = async (req, res, next) => {
     const user = req.user;
     Object.assign(user, req.body);
     await user.save();
-    res.status(200).json({message: 'success', data: user});
+    res.status(200).json({message: 'success', data: user.toObject({virtuals: true})});
   } catch (e) {
     next(e);
   }
@@ -67,6 +67,7 @@ exports.uploadProfilePic = async (req, res, next) => {
     if (req.user.image && req.user.image.url) {
       await s3.deleteImage(req.user.image.key);
     }
+    console.log(req)
     req.user.image.url = req.file.location;
     req.user.image.key = req.file.key;
     await req.user.save();
