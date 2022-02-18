@@ -20,7 +20,7 @@ postSchema.static('findByHashtag', async function (hashtag) {
   const posts = await this.find({});
   const fetchedHashtag = await Hashtag.findOne({title: hashtag});
 
-  return await posts.findOne({hashtag: fetchedHashtag._id});
+  return await this.findOne({hashtag: fetchedHashtag._id});
 });
 
 const Post = mongoose.model('post', postSchema);
