@@ -2,6 +2,7 @@ const {validationResult} = require("express-validator");
 const Post = require("../models/post-model");
 const HttpError = require("../utils/HttpError");
 const User = require("../models/user-model");
+const Notification = require("../models/notification-model");
 const Reaction = require("../models/reaction-model");
 const Hashtag = require("../models/hashtag-model");
 const Comment = require("../models/comment-model");
@@ -16,7 +17,7 @@ exports.getPosts = async (req, res, next) => {
             populate: {
                 path: "user",
                 model: User,
-                select: {lastname: 1, firstname: 1,fullName: 1, image: 1, _id: 1},
+                select: {lastname: 1, firstname: 1, fullName: 1, image: 1, _id: 1},
             },
         })
             .populate({
@@ -24,7 +25,7 @@ exports.getPosts = async (req, res, next) => {
                 populate: {
                     path: "user",
                     model: User,
-                    select: {lastname: 1, firstname: 1,fullName: 1, image: 1, _id: 1},
+                    select: {lastname: 1, firstname: 1, fullName: 1, image: 1, _id: 1},
                 },
             })
             .populate({path: "user", select: {lastname: 1, firstname: 1, image: 1, _id: 1}})
@@ -120,9 +121,14 @@ exports.createPost = async (req, res, next) => {
         }
         post.hashtag = hashtag._id
         hashtag.posts.push(post);
+
         await hashtag.save();
-        await post.save();
-        res.status(200).json({message: "success", data: post});
+        const savedPost = await post.save();
+        req.user.posts.push(savedPost._id)
+        await req.user.save()
+        await Post.populate(savedPost, {path: 'user', model: User})
+        await Post.populate(savedPost, {path: 'hashtag', model: Hashtag})
+        res.status(200).json({message: "success", data: savedPost});
     } catch (e) {
         next(e);
     }
@@ -140,6 +146,19 @@ exports.addReactionToPost = async (req, res, next) => {
             user: req.user._id,
         });
 
+        if (req.body.reactionType === "report") {
+            const user = await User.findById(post.user).populate({
+                path: "notifications",
+            })
+            console.log(user)
+            const notification = new Notification({
+                message: "You've been reported for the following post",
+                post: post._id
+            })
+           const savedNotification = await notification.save()
+            user.notifications.push(savedNotification._id)
+            await user.save()
+        }
         let savedReaction = await newReaction.save();
         await Reaction.populate(savedReaction, {
             path: 'user', model: User,
@@ -188,7 +207,7 @@ exports.addCommentToPost = async (req, res, next) => {
         const savedComment = await newComment.save();
         await Comment.populate(savedComment, {
             path: 'user', model: User,
-            select: {lastname: 1, firstname: 1,fullName: 1, image: 1, _id: 1},
+            select: {lastname: 1, firstname: 1, fullName: 1, image: 1, _id: 1},
         })
         post.comments.push(newComment);
         await post.save();
@@ -200,7 +219,8 @@ exports.addCommentToPost = async (req, res, next) => {
 
 exports.getNewPostImage = async (req, res, next) => {
     try {
-        const postsPhotos = await Post.find({}).select({image: 1, _id: 1});
+        const postsPhotos = await Post.find({}).select({image: 1, _id: 1, hashtag: 1})
+            .populate({path: "hashtag", select: {title: 1, _id: 1}});
         if (!postsPhotos) {
             throw new HttpError("cant find any photos to compare with", 404);
         }
